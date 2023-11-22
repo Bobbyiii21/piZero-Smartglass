@@ -19,6 +19,12 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 from time import sleep
+from gpiozero import Button
+
+# Button Setup
+buttonA = Button(22)
+buttonB = Button(23)
+buttonC = Button(24)
 
 
 # Lists for each room
@@ -121,6 +127,66 @@ def selection():
                         speak(f"{selected_string[2:]} is in {location[2:]}")
                         break
 
+""" def selection():
+    selected_index = 0
+
+    while True:
+        # get the selected string
+        if obj_list:
+            selected_string = obj_list[selected_index]
+            print(f"Selected: {selected_string[2:]}")
+
+            # get the user input
+            if buttonA.is_pressed:
+                selected_index = (selected_index - 1) % len(obj_list)
+
+            # if the user enters 'd', move the selection to the right
+            elif buttonB.is_pressed:
+                selected_index = (selected_index + 1) % len(obj_list)
+
+            # if the user presses enter, find the location of the selected item
+            elif buttonC.is_pressed:
+                # find the list the selected string is in
+                for location in loc_list:
+                    if selected_string in eval(location):
+                        print(f"{selected_string[2:]} is in {location[2:]}")
+                        speak(f"{selected_string[2:]} is in {location[2:]}") """
+
+def selection():
+    selected_index = 0
+
+    while True:
+        # get the selected string
+        if obj_list:
+            
+
+            # get the user input
+            sleep(.15)
+
+            # if the user enters 'a', move the selection to the left
+            if buttonA.value == 1:
+                selected_index = (selected_index - 1) % len(obj_list)
+                selected_string = obj_list[selected_index]
+                print(f"Selected: {selected_string[2:]}")
+                speak(f"Selected: {selected_string[2:]}")
+                
+
+            # if the user enters 'd', move the selection to the right
+            if buttonC.value == 1:
+                selected_index = (selected_index + 1) % len(obj_list)
+                selected_string = obj_list[selected_index]
+                print(f"Selected: {selected_string[2:]}")
+                speak(f"Selected: {selected_string[2:]}")
+
+            # if the user presses enter, find the location of the selected item
+            if buttonB.value == 1:
+                # find the list the selected string is in
+                for location in loc_list:
+                    if selected_string in eval(location):
+                        print(f"{selected_string[2:]} is at the {location[2:]}")
+                        speak(f"{selected_string[2:]} is at the {location[2:]}")
+                        break                   
+
 def databaseSend():
     # Fetch the service account key JSON file contents
     cred = credentials.Certificate(
@@ -161,6 +227,7 @@ if __name__ == '__main__':
     databaseSendThread.start()
     
     speak("Hello, All Systems Operational")
+    print("Hello, All Systems Operational")
     
     databaseSendThread.join()
     qrReaderThread.join()
