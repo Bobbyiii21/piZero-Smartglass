@@ -97,7 +97,7 @@ def speak(txt, lang='en'):
         engine.runAndWait()
         engine.stop()
 
-def selection():
+""" def selection():
     selected_index = 0
 
     while True:
@@ -125,7 +125,7 @@ def selection():
                     if selected_string in eval(location):
                         print(f"{selected_string[2:]} is in {location[2:]}")
                         speak(f"{selected_string[2:]} is in {location[2:]}")
-                        break
+                        break """
 
 """ def selection():
     selected_index = 0
