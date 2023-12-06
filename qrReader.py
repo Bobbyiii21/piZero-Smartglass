@@ -43,20 +43,14 @@ loc_list = ['l_kitchenTable',
 obj_list = []
 
 picam2 = Picamera2()
-picam2.start_preview(Preview.QTGL)
-config = picam2.create_preview_configuration(main={"size": (640, 480)}, transform=Transform(hflip=False, vflip=False))
-picam2.configure(config)
 picam2.set_controls({"AfMode": controls.AfModeEnum.Continuous}) #enable continuous autofocus
-
-
 barcodes = []
-#picam2.post_callback = reader
 picam2.start()
-
 cap = picam2.capture_array("main") #capture video from main camera in the form of an array
 
 def qrReader():
     while True:
+        cap = picam2.capture_array("main")
         barcodes = decode(cap) #decode the data from the array
         for b in barcodes:
             dec = b.data.decode('utf-8') #decodes the qr code from bytes to string
@@ -82,7 +76,7 @@ def qrReader():
                     except Exception as e:
                         pass
                         print(e)
-                        # print("Object List: ")
+                         #print("Object List: ")
                     # print(obj_list)
 
 def speak(txt, lang='en'):
@@ -96,61 +90,6 @@ def speak(txt, lang='en'):
         engine.say(txt)
         engine.runAndWait()
         engine.stop()
-
-""" def selection():
-    selected_index = 0
-
-    while True:
-        # get the selected string
-        if obj_list:
-            selected_string = obj_list[selected_index]
-            print(f"Selected: {selected_string[2:]}")
-
-            # get the user input
-            user_input = input(
-                "Enter 'a' to move left, 'd' to move right, or 'enter' to select: ")
-
-            # if the user enters 'a', move the selection to the left
-            if user_input == 'a':
-                selected_index = (selected_index - 1) % len(obj_list)
-
-            # if the user enters 'd', move the selection to the right
-            elif user_input == 'd':
-                selected_index = (selected_index + 1) % len(obj_list)
-
-            # if the user presses enter, find the location of the selected item
-            elif user_input == '':
-                # find the list the selected string is in
-                for location in loc_list:
-                    if selected_string in eval(location):
-                        print(f"{selected_string[2:]} is in {location[2:]}")
-                        speak(f"{selected_string[2:]} is in {location[2:]}")
-                        break """
-
-""" def selection():
-    selected_index = 0
-
-    while True:
-        # get the selected string
-        if obj_list:
-            selected_string = obj_list[selected_index]
-            print(f"Selected: {selected_string[2:]}")
-
-            # get the user input
-            if buttonA.is_pressed:
-                selected_index = (selected_index - 1) % len(obj_list)
-
-            # if the user enters 'd', move the selection to the right
-            elif buttonB.is_pressed:
-                selected_index = (selected_index + 1) % len(obj_list)
-
-            # if the user presses enter, find the location of the selected item
-            elif buttonC.is_pressed:
-                # find the list the selected string is in
-                for location in loc_list:
-                    if selected_string in eval(location):
-                        print(f"{selected_string[2:]} is in {location[2:]}")
-                        speak(f"{selected_string[2:]} is in {location[2:]}") """
 
 def selection():
     selected_index = 0
@@ -190,7 +129,7 @@ def selection():
 def databaseSend():
     # Fetch the service account key JSON file contents
     cred = credentials.Certificate(
-        'PythonQrReader/QR Implemetation/projectsmartglass-aee0e-firebase-adminsdk-vmdds-842cf32920.json')
+        '/home/Hyperlapse/piZero-Smartglass/projectsmartglass-aee0e-firebase-adminsdk-vmdds-842cf32920.json')
 
     # Initialize the app with a service account, granting admin privileges
     firebase_admin.initialize_app(cred, {
